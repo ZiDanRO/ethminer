@@ -10,6 +10,10 @@ os: Visual Studio 2015
 configuration:
   - Release
   - RelWithDebInfo
+environment:
+  github_user_repo: {ZiDanRO}/{ethminer}
+  GITHUB_USER_PASSWORD:
+    secure: N2cyWHu63MCENd8XO4W52g== #https://ci.appveyor.com/tools/encrypt
 
 install: | # Download CUDA Windows installer (local) and extract /compiler/* to /CUDA/vX.0/ zip archive.
   appveyor DownloadFile https://github.com/ethereum/cpp-dependencies/releases/download/cache/CUDA-v9.0-WindowsServer2012.zip
@@ -49,6 +53,6 @@ deploy:
   draft: false
   artifact: ethminer
   auth_token:
-    secure: uDRcvbW+9GIyKlZ9guJfWOQ6jg0An6eULg6mEkYgdKn/GVNpYSKvO5oHxP0U8a+e
+    secure: 6uonq2ni8t73sivyihg8
   on:
     appveyor_repo_tag: true
