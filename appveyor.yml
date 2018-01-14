@@ -13,7 +13,7 @@ configuration:
 environment:
   github_user_repo: {ZiDanRO}/{ethminer}
   GITHUB_USER_PASSWORD:
-    secure: N2cyWHu63MCENd8XO4W52g== #https://ci.appveyor.com/tools/encrypt
+    secure: N2cyWHu63MCENd8XO4W52g==
 
 install: | # Download CUDA Windows installer (local) and extract /compiler/* to /CUDA/vX.0/ zip archive.
   appveyor DownloadFile https://github.com/ethereum/cpp-dependencies/releases/download/cache/CUDA-v9.0-WindowsServer2012.zip
