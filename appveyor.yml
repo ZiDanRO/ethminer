@@ -11,8 +11,7 @@ configuration:
   - Release
   - RelWithDebInfo
 environment:
-  github_user_repo: ZiDanRO/ethminer
-  github_api_key:
+ GITHUB_USER_PASSWORD:
     secure: N2cyWHu63MCENd8XO4W52g==
 
 install: | # Download CUDA Windows installer (local) and extract /compiler/* to /CUDA/vX.0/ zip archive.
@@ -53,6 +52,6 @@ deploy:
   draft: false
   artifact: ethminer
   auth_token:
-    secure: 6uonq2ni8t73sivyihg8
+    secure: 697261546b0e326042b17e5ed804ff571baf02ee
   on:
     appveyor_repo_tag: true
