@@ -12,7 +12,7 @@ configuration:
   - RelWithDebInfo
 environment:
   github_user_repo: {ZiDanRO}/{ethminer}
-  GITHUB_USER_PASSWORD:
+  github_api_key:
     secure: N2cyWHu63MCENd8XO4W52g==
 
 install: | # Download CUDA Windows installer (local) and extract /compiler/* to /CUDA/vX.0/ zip archive.
