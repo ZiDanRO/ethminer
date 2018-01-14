@@ -59,7 +59,6 @@
 using namespace std;
 using namespace dev;
 using namespace dev::eth;
-using namespace boost::algorithm;
 
 
 class BadArgument: public Exception {};
@@ -243,6 +242,10 @@ public:
 		else if ((arg == "-RH" || arg == "--report-hashrate") && i + 1 < argc)
 		{
 			m_report_stratum_hashrate = true;
+		}
+		else if ((arg == "-HWMON") && i + 1 < argc)
+		{
+			m_show_hwmonitors = true;
 		}
 
 #endif
@@ -572,6 +575,7 @@ public:
 			<< "        1: eth-proxy compatible: dwarfpool, f2pool, nanopool (required for hashrate reporting to work with nanopool)" << endl
 			<< "        2: EthereumStratum/1.0.0: nicehash" << endl
 			<< "    -RH, --report-hashrate Report current hashrate to pool (please only enable on pools supporting this)" << endl
+			<< "    -HWMON Displays gpu temp and fan percent." << endl
 			<< "    -SE, --stratum-email <s> Email address used in eth-proxy (optional)" << endl
 			<< "    --farm-recheck <n>  Leave n ms between checks for changed work (default: 500). When using stratum, use a high value (i.e. 2000) to get more stable hashrate output" << endl
 #endif
@@ -813,7 +817,7 @@ private:
 				});
 				for (unsigned i = 0; !completed; ++i)
 				{
-					auto mp = f.miningProgress();
+					auto mp = f.miningProgress(m_show_hwmonitors);
 					if (current)
 					{
 						minelog << mp << f.getSolutionStats() << f.farmLaunchedFormatted();
@@ -852,19 +856,23 @@ private:
 					}
 					this_thread::sleep_for(chrono::milliseconds(_recheckPeriod));
 				}
-				cnote << "Solution found; Submitting to" << _remote << "...";
-				cnote << "  Nonce:" << solution.nonce;
-				cnote << "  headerHash:" << solution.headerHash.hex();
-				cnote << "  mixHash:" << solution.mixHash.hex();
 				if (EthashAux::eval(solution.seedHash, solution.headerHash, solution.nonce).value < solution.boundary)
 				{
 					bool ok = prpc->eth_submitWork("0x" + toHex(solution.nonce), "0x" + toString(solution.headerHash), "0x" + toString(solution.mixHash));
 					if (ok) {
-						cnote << EthLime << "B-) Submitted and accepted." << EthReset;
+						cnote << "Solution found; Submitted to" << _remote << "...";
+						cnote << "  Nonce:" << solution.nonce;
+						cnote << "  headerHash:" << solution.headerHash.hex();
+						cnote << "  mixHash:" << solution.mixHash.hex();
+						cnote << EthLime << "Accepted." << EthReset;
 						f.acceptedSolution(false);
 					}
 					else {
-						cwarn << ":-( Not accepted.";
+						cwarn << "Solution found; Submitted to" << _remote << "...";
+						cwarn << "  Nonce:" << solution.nonce;
+						cwarn << "  headerHash:" << solution.headerHash.hex();
+						cwarn << "  mixHash:" << solution.mixHash.hex();
+						cwarn << "Not accepted.";
 						f.rejectedSolution(false);
 					}
 					//exit(0);
@@ -962,7 +970,7 @@ private:
 
 			while (client.isRunning())
 			{
-				auto mp = f.miningProgress();
+				auto mp = f.miningProgress(m_show_hwmonitors);
 				if (client.isConnected())
 				{
 					if (client.current())
@@ -1011,7 +1019,7 @@ private:
 
 			while (client.isRunning())
 			{
-				auto mp = f.miningProgress();
+				auto mp = f.miningProgress(m_show_hwmonitors);
 				if (client.isConnected())
 				{
 					if (client.current())
@@ -1084,6 +1092,7 @@ private:
 	unsigned m_defaultStratumFarmRecheckPeriod = 2000;
 	bool m_farmRecheckSet = false;
 	int m_worktimeout = 180;
+	bool m_show_hwmonitors = false;
 #if API_CORE
 	int m_api_port = 0;
 #endif	
