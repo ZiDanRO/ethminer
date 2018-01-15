@@ -10,9 +10,6 @@ os: Visual Studio 2015
 configuration:
   - Release
   - RelWithDebInfo
-environment:
- access_token::
-    secure: N2cyWHu63MCENd8XO4W52g==
 
 install: | # Download CUDA Windows installer (local) and extract /compiler/* to /CUDA/vX.0/ zip archive.
   appveyor DownloadFile https://github.com/ethereum/cpp-dependencies/releases/download/cache/CUDA-v9.0-WindowsServer2012.zip
@@ -54,4 +51,5 @@ deploy:
   auth_token:
     secure: Eir4mS1v3CIf4c/ciu/+GAPgy16Y7vFAHngwEz5HX0FiRGjlHrjbjkIUhcQ0q80L
   on:
+    branch: master
     appveyor_repo_tag: true
