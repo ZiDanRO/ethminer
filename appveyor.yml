@@ -11,7 +11,7 @@ configuration:
   - Release
   - RelWithDebInfo
 environment:
- GITHUB_USER_PASSWORD:
+ access_token::
     secure: N2cyWHu63MCENd8XO4W52g==
 
 install: | # Download CUDA Windows installer (local) and extract /compiler/* to /CUDA/vX.0/ zip archive.
